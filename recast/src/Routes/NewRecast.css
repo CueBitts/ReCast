@@ -1,0 +1,43 @@
+body {
+    background-color: #131313;
+}
+
+.newRecast {
+    background-color: #3a3a3a;
+    color: white;
+    
+    margin: auto;
+    margin-top: 2rem;
+    margin-right: 0rem;
+    margin-left: 0rem;
+    
+    padding: 0.5rem;
+    padding-top: 0.5rem;
+    
+    border-radius: .5rem;
+    
+}
+
+form {
+    padding: 0.5rem
+}
+
+.castInst {
+    width: 18.5%;
+    height: 17.5rem;
+    padding: 0.5rem;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+    display: inline-block;
+    text-align: center;
+}
+
+.castInstImg {
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    margin: -0.5rem;
+
+    border-radius: .25rem;
+}
+
