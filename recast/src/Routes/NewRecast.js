@@ -6,21 +6,12 @@ import './NewRecast.css'
 
 function NewRecast(props) {
     const {id} = useParams()
+    const recastAPI = 'http://localhost:8000'
     const APIKey = 'ab5b083db2d7cac5a40a452fba117560'
     const search = useRef(null)
     
+
     const [movie, setMovie] = useState(null)
-    
-    // const getMovie = () => {
-    //         fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${APIKey}&language=en-US&append_to_response=credits`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'content-type': 'application/json'
-    //             }
-    //         })
-    //         .then(response => response.json())
-    //         .then(data => setMovie(data))
-    // }
 
     useEffect(() => {
         const getMovie = () => {
@@ -35,29 +26,21 @@ function NewRecast(props) {
         }
         getMovie()
     }, [])
-    
-    const [newRecast, setNewRecast] = useState({
-        name: '',
-        movie: '',
-        user: '',
-        desc: ''
-    })
 
+    
     const showRecastModal = (character) => {
-        console.log(character.name)
         
     }
 
     const hideRecastModal = () => {
 
     }
-    
-    
+
 
     const [actors, setActors] = useState(null)
 
     const getActors = (query) => {
-        fetch(`https://api.themoviedb.org/3/search/person?api_key=${APIKey}&language=en-US&query=${query.replace(/ /g, '%20')}&include_adult=false`, {
+        fetch(`https://api.themoviedb.org/3/search/person?api_key=${APIKey}&language=en-US&query=${query.replace(/ /g, '%20')}&include_adult=false&append_to_response=images`, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json'
@@ -65,20 +48,77 @@ function NewRecast(props) {
         })
         .then(response => response.json())
         .then(data => setActors(data))
-    }   
+    }
 
-    const [newSearch, setNewSearch] = useState({
-        query: ''
+
+    let recastId = 0
+    const recastInsts = useRef([])
+    const newRecastInst = useRef({
+        name: '',
+        actor: '',
+        desc: '',
+        recast: ''
+    })
+
+    const handleRecastInstChange = (cast) => (e) => {
+        e.preventDefault()
+        newRecastInst.current = { ...newRecastInst.current, name: cast.character}
+        console.log(newRecastInst.current)
+    }
+
+    const handleRecastInstSubmit = (actor) => (e) => {
+        e.preventDefault()
+        newRecastInst.current = { ...newRecastInst.current, actor: actor.id}
+        console.log(newRecastInst.current)
+        recastInsts.current = [...recastInsts.current, newRecastInst.current]
+        console.log(newRecastInst.current)
+        console.log(recastInsts.current)
+        newRecastInst.current = {
+            name: '',
+            actor: '',
+            desc: '',
+            recast: ''
+        }
+    }
+    
+
+    const [newRecast, setNewRecast] = useState({
+        name: '',
+        movie: '',
+        user: '',
+        desc: ''
     })
     
     const handleRecastChange = (e) => {
         setNewRecast({ ...newRecast, user: '1', movie: id, [e.target.name]: e.target.value  })
     }
 
-    const handleRecastSubmit = (e) => {
+    const handleRecastSubmit = async (e) => {
         e.preventDefault()
         console.log(newRecast)
-        // add to psql
+
+        const response = await fetch(`${recastAPI}/recasts/`, {
+            method: 'POST',
+            headers: {
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify(newRecast)
+        })
+        let data = await response.json()
+        recastId = data.id
+        console.log(recastId)
+
+        console.log(recastInsts.current)
+        recastInsts.current.map(async recastInst => {
+            recastInst.recast = recastId
+            await fetch(`${recastAPI}/recastinsts/`, {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(recastInst)
+            })
+        })
 
         setNewRecast({
             name: '',
@@ -88,6 +128,11 @@ function NewRecast(props) {
         })
     }
 
+
+    const [newSearch, setNewSearch] = useState({
+        query: ''
+    })
+    
     const handleSearchChange = (e) => {
         setNewSearch({ ...newSearch, query: e.target.value })
     }
@@ -95,13 +140,13 @@ function NewRecast(props) {
     const handleSearchSubmit = (e) => {
         e.preventDefault()
         getActors(newSearch.query)
-        console.log(actors)
 
         search.current.value = ''
         setNewSearch({
             query: ''
         })
     }
+
     
     const loading = () => {
         return <h3>Loading...</h3>
@@ -110,7 +155,7 @@ function NewRecast(props) {
     const loaded = () => {
         return (
             <div className='newRecast'>
-                <form onSubmit={handleRecastSubmit}>
+                {/* <form name='newRecast' onSubmit={handleRecastSubmit}> */}
                     <input
                         className='input'
                         type='text'
@@ -130,24 +175,25 @@ function NewRecast(props) {
                     />
                     <button
                         className='button'
-                        type='submit'
-                        name='submit'>
+                        type='button'
+                        name='submit'
+                        onClick={handleRecastSubmit}>
                         Submit
                     </button>
-                </form>
+                {/* </form> */}
                 <div className='newRecast'>  
-                    {movie?.credits.cast.map(character => {
+                    {movie?.credits.cast.map(cast => {
                         return (
-                            <div key={character.id} className='castInst'>
-                                <p>{character.character}</p>
-                                <img className='castInstImg' src='https://cdn4.vectorstock.com/i/thumb-large/28/63/profile-placeholder-image-gray-silhouette-vector-21542863.jpg' alt='' onClick={e => showRecastModal(character)}/>
-                                <p>Original Actor: {character.name}</p>
+                            <div key={cast.id} className='castInst'>
+                                <p>{cast.character}</p>
+                                <img className='castInstImg' src='https://cdn4.vectorstock.com/i/thumb-large/28/63/profile-placeholder-image-gray-silhouette-vector-21542863.jpg' alt='' onClick={handleRecastInstChange(cast)}/>
+                                <p>Original Actor: {cast.name}</p>
                             </div>
                         )
                     })}
                 </div>
                 <div className='newRecastModal'>
-                    <form onSubmit = {handleSearchSubmit}>    
+                    <form name='search' onSubmit={handleSearchSubmit}>    
                         <input
                             className='input'
                             type='text'
@@ -168,8 +214,7 @@ function NewRecast(props) {
                     {actors?.results.map(result => {
                         return (
                             <div key={result.id} className='result'>
-                                <Link to=''>{result.name} {result.id}</Link>
-                                {result.name} {result.id}
+                                <p onClick={handleRecastInstSubmit(result)}>{result.name} {result.id}</p>
                             </div>
                         )
             })}
