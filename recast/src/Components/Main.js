@@ -3,6 +3,8 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import Recasts from '../Routes/Recasts';
 import Recast from '../Routes/Recast';
+import SignIn  from '../Routes/SignIn';
+import SignUp from '../Routes/SignUp';
 import NewRecasts from '../Routes/NewRecasts';
 import NewRecast from '../Routes/NewRecast';
 
@@ -60,6 +62,14 @@ function Main() {
                     element={<Recast
                         recasts={recasts}
                     />}
+                />
+                <Route
+                    path='/sign-in'
+                    element={<SignIn/>}
+                />
+                <Route
+                    path='/sign-up'
+                    element={<SignUp/>}
                 />
                 <Route
                     path='/new-recast'
