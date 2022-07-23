@@ -1,5 +1,5 @@
 import {useState, useEffect, useRef} from 'react';
-import {useParams, Link} from 'react-router-dom';
+import {useParams, Link, useNavigate} from 'react-router-dom';
 
 import './NewRecast.css'
 
@@ -9,6 +9,7 @@ function NewRecast(props) {
     const recastAPI = 'http://localhost:8000'
     const APIKey = 'ab5b083db2d7cac5a40a452fba117560'
     const search = useRef(null)
+    const navigate = useNavigate()
     
 
     const [movie, setMovie] = useState(null)
@@ -90,7 +91,7 @@ function NewRecast(props) {
     })
     
     const handleRecastChange = (e) => {
-        setNewRecast({ ...newRecast, user: '1', movie: id, [e.target.name]: e.target.value  })
+        setNewRecast({ ...newRecast, user: JSON.parse(sessionStorage.signedIn).id, movie: id, [e.target.name]: e.target.value  })
     }
 
     const handleRecastSubmit = async (e) => {
@@ -126,6 +127,8 @@ function NewRecast(props) {
             user: '',
             desc: ''
         })
+
+        navigate('/')
     }
 
 

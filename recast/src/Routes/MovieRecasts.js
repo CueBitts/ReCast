@@ -1,15 +1,16 @@
 import {useState, useEffect, useRef} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {useParams, Link, useNavigate} from 'react-router-dom';
 
 import './Recasts.css'
 
-function Recasts(props) {
+function MovieRecasts(props) {
+    const {id} = useParams()
     const navigate = useNavigate()
 
     
     const [recasts, setRecasts] = useState()
     useEffect(() => {
-        setRecasts(props.recasts)
+        setRecasts(props.recasts.filter(recast => recast.movie == id))
     }, [props.recasts])
 
     const [movies, setMovies] = useState()
@@ -38,7 +39,7 @@ function Recasts(props) {
             <div key={recast.id} className='recast' onClick={handleRecastClick(recast.id)}>
                 <div className='recastHeader'>
                     <h2>{recast.name}</h2>
-                    <h4>Recast of {movies.find(movie => movie.id == recast.movie)?.title} by {recast.user.name}</h4>
+                    <h4>Recast of <Link to=''>{movies.find(movie => movie.id == recast.movie)?.title}</Link> by <Link to=''>{recast.user.name}</Link></h4>
                 </div>
                 {recast.recastInsts.slice(0, 5).map(recastInst => {   
                     return (
@@ -61,4 +62,4 @@ function Recasts(props) {
     )
 }
 
-export default Recasts;
+export default MovieRecasts;

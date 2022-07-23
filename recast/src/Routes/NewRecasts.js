@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 function NewRecasts(props) {
     const APIKey = 'ab5b083db2d7cac5a40a452fba117560'
     
+    
     const search = useRef(null)
 
     const [movies, setMovies] = useState(null)
@@ -61,7 +62,7 @@ function NewRecasts(props) {
             {movies?.results.map(result => {
                 return (
                     <div key={result.id} className='result'>
-                        <Link to={`/new-recast/${result.id}`}>{result.title} ({result.release_date.slice(0,4)})</Link>
+                        <Link to={`/new-recast/${result.id}`}>{result.title} ({result.release_date?.slice(0,4)})</Link>
                     </div>
                 )
             })}
