@@ -2,9 +2,11 @@ import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import Recasts from '../Routes/Recasts';
+import MovieRecasts from '../Routes/MovieRecasts';
 import Recast from '../Routes/Recast';
 import SignIn  from '../Routes/SignIn';
 import SignUp from '../Routes/SignUp';
+import Profile from '../Routes/Profile';
 import NewRecasts from '../Routes/NewRecasts';
 import NewRecast from '../Routes/NewRecast';
 
@@ -26,7 +28,7 @@ function Main() {
                 }
             })
             let data = await response.json()
-            setRecasts(data)
+            setRecasts(data.reverse())
             // console.log(data)
             data.map(async recast => {
                 const response = await fetch(`https://api.themoviedb.org/3/movie/${recast.movie}?api_key=${APIKey}&language=en-US`, {
@@ -59,8 +61,18 @@ function Main() {
             <Routes>
                 <Route
                     path='/recasts/:id'
+                    element={<MovieRecasts
+                        recasts={recasts}
+                        movies={movies}
+                        actors={actors}
+                    />}
+                />
+                <Route
+                    path='/recast/:id'
                     element={<Recast
                         recasts={recasts}
+                        movies={movies}
+                        actors={actors}
                     />}
                 />
                 <Route
@@ -70,6 +82,14 @@ function Main() {
                 <Route
                     path='/sign-up'
                     element={<SignUp/>}
+                />
+                <Route
+                    path='profile'
+                    element={<Profile
+                        recasts={recasts}
+                        movies={movies}
+                        actors={actors}
+                    />}
                 />
                 <Route
                     path='/new-recast'
