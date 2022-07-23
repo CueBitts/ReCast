@@ -1,3 +1,3 @@
 ReCast
 
-![app-screenshot](Screenshot 2022-07-23 011855.png)
+![app-image](app-image.png)
