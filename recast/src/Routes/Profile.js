@@ -5,7 +5,7 @@ import './Profile.css'
 
 
 function Profile(props) {
-    const recastAPI = 'http://localhost:8000'
+    const recastAPI = 'https://recastapi.herokuapp.com'
     const navigate = useNavigate()
     const name = useRef(null)
     const password = useRef(null)

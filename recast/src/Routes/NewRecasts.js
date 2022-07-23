@@ -1,9 +1,10 @@
 import {useState, useEffect, useRef} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
 
 function NewRecasts(props) {
     const APIKey = 'ab5b083db2d7cac5a40a452fba117560'
+    const navigate = useNavigate()
     
     
     const search = useRef(null)
@@ -62,7 +63,7 @@ function NewRecasts(props) {
             {movies?.results.map(result => {
                 return (
                     <div key={result.id} className='result'>
-                        <Link to={`/new-recast/${result.id}`}>{result.title} ({result.release_date?.slice(0,4)})</Link>
+                        <li onClick={() => navigate(`/new-recast/${result.id}`)}>{result.title} ({result.release_date?.slice(0,4)})</li>
                     </div>
                 )
             })}

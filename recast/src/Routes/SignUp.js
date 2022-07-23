@@ -5,7 +5,7 @@ import './SignUp.css'
 
 
 function SignUp() {
-    const recastAPI = 'http://localhost:8000'
+    const recastAPI = 'https://recastapi.herokuapp.com'
     const navigate = useNavigate()
 
     const [newForm, setNewForm] = useState({

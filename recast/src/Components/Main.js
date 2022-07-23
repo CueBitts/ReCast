@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 
 import Recasts from '../Routes/Recasts';
 import MovieRecasts from '../Routes/MovieRecasts';
+import UserRecasts from '../Routes/UserRecasts';
 import Recast from '../Routes/Recast';
 import SignIn  from '../Routes/SignIn';
 import SignUp from '../Routes/SignUp';
@@ -12,7 +13,7 @@ import NewRecast from '../Routes/NewRecast';
 
 
 function Main() {
-    const recastAPI = 'http://localhost:8000'
+    const recastAPI = 'https://recastapi.herokuapp.com'
     const APIKey = 'ab5b083db2d7cac5a40a452fba117560'
     
     const [recasts, setRecasts] = useState()
@@ -62,6 +63,14 @@ function Main() {
                 <Route
                     path='/recasts/:id'
                     element={<MovieRecasts
+                        recasts={recasts}
+                        movies={movies}
+                        actors={actors}
+                    />}
+                />
+                <Route
+                    path='/user/:id'
+                    element={<UserRecasts
                         recasts={recasts}
                         movies={movies}
                         actors={actors}

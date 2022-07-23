@@ -32,7 +32,7 @@ const Modal = ({isShowing, hide, handleSearchSubmit, search, handleSearchChange,
                 {actors?.results.map(result => {
                     return (
                         <div key={result.id} className='result'>
-                            <p onClick={handleRecastInstSubmit(result)}>{result.name}</p>
+                            <li onClick={handleRecastInstSubmit(result)}>{result.name}</li>
                         </div>
                     )
                 })}

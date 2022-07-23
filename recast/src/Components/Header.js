@@ -5,11 +5,16 @@ import './Header.css';
 
 function Header() {
     const navigate = useNavigate()
+    const [createRecast, setCreateRecast] = useState(null)
     const [userLink, setUserLink] = useState(null)
+    const [signedIn, setSignedIn] = useState(sessionStorage.signedIn ? JSON.parse(sessionStorage.signedIn) : null)
+    
+    window.addEventListener('storage', () => setSignedIn(sessionStorage.signedIn ? JSON.parse(sessionStorage.signedIn) : null));
     
     useEffect(() => {
         if(sessionStorage.signedIn) {
             setUserLink(<Link to='/profile'>Profile</Link>)
+            setCreateRecast(<Link to='/new-recast'>Create Recast</Link>)
         } else {
             setUserLink(
                 <div>
@@ -17,8 +22,9 @@ function Header() {
                     <Link to='/sign-up'>Sign up</Link>
                 </div>
             )
+            setCreateRecast(null)
         }
-    }, [sessionStorage])
+    }, [signedIn])
     
     
     const handleClickRecast = (e) => {
@@ -35,7 +41,7 @@ function Header() {
                 {userLink}
             </span>
             <span className='subHeader'>
-                <Link to='/new-recast'>Create Recast</Link>
+                {createRecast}
             </span>
         </div>
     )

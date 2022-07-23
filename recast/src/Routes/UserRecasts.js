@@ -1,13 +1,16 @@
 import {useState, useEffect, useRef} from 'react';
-import {useParams, Link} from 'react-router-dom';
+import {useParams, Link, useNavigate} from 'react-router-dom';
 
-function Recast(props) {
+import './Recasts.css'
+
+function UserRecasts(props) {
     const {id} = useParams()
+    const navigate = useNavigate()
 
-
+    
     const [recasts, setRecasts] = useState()
     useEffect(() => {
-        setRecasts(props.recasts)
+        setRecasts(props.recasts.filter(recast => recast.user.id == id))
     }, [props.recasts])
 
     const [movies, setMovies] = useState()
@@ -19,21 +22,26 @@ function Recast(props) {
     useEffect(() => {
         setActors(props.actors)
     }, [props.actors])
-
-
+    
     const loading = () => {
         return <h3>Loading...</h3>
     }
 
+
+    const handleRecastClick = (id) => (e) => {
+        e.preventDefault()
+
+        navigate(`/recast/${id}`)
+    }
+
     const loaded = () => {
-        const recast = props.recasts.find(r => r.id == id)
-        
-        return (
-            <div className='recast'>
-                <h2>{recast.name}</h2>
-                <h4>Recast of <Link to={`/recasts/${recast.movie}`}>{movies.find(movie => movie.id == recast.movie)?.title}</Link> by <Link to={`/user/${recast.user.id}`}>{recast.user.name}</Link></h4>
-                <p>{recast.desc}</p>
-                {recast.recastInsts.map(recastInst => {   
+        return recasts.map(recast => (
+            <div key={recast.id} className='recast' onClick={handleRecastClick(recast.id)}>
+                <div className='recastHeader'>
+                    <h2>{recast.name}</h2>
+                    <h4>Recast of <Link to=''>{movies.find(movie => movie.id == recast.movie)?.title}</Link> by <Link to=''>{recast.user.name}</Link></h4>
+                </div>
+                {recast.recastInsts.slice(0, 5).map(recastInst => {   
                     return (
                         <div key={recastInst.id} className='recastInst'>    
                             <h6>{actors.find(actor => actor.id == recastInst.actor)?.name}</h6>
@@ -42,15 +50,16 @@ function Recast(props) {
                         </div>
                     )
                 })}
+                {/* <span><p onClick={handleUpvote(recast.id)}>Upvote {recast.upvotes.length}</p> <p onClick={handleDownvote(recast.id)}>Downvote {recast.downvotes.length}</p></span> */}
             </div>
-        )
+        ))
     }
-    
+
     return(
-        <div className='recast'>
+        <div className='recasts'>
             {recasts && movies && actors ? loaded() : loading()}
         </div>
     )
 }
 
-export default Recast;
+export default UserRecasts;

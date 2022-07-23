@@ -6,7 +6,6 @@ import './Recasts.css'
 function Recasts(props) {
     const navigate = useNavigate()
 
-    
     const [recasts, setRecasts] = useState()
     useEffect(() => {
         setRecasts(props.recasts)
