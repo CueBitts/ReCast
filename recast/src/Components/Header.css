@@ -1,0 +1,10 @@
+.header {
+    background-color: #3a3a3a;
+    color: white;
+    padding: 1rem;
+}
+
+.subHeader {
+    display: flex;
+    justify-content: space-between;
+}
